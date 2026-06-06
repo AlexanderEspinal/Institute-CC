@@ -1,19 +1,21 @@
 interface PostCardProps {
   title: string
   imgSrc: string
+  imgAlt: string
   children: React.ReactNode
 }
 
-function PostCard({ title, imgSrc, children }: PostCardProps) {
+function PostCard({ title, imgSrc, imgAlt, children }: PostCardProps) {
   return (
     <article className="py-8">
       <h2 className="text-2xl font-light text-gray-800 dark:text-gray-100 mb-4">{title}</h2>
       <div className="space-y-3 text-gray-500 dark:text-gray-400 leading-relaxed">{children}</div>
       <img
         src={imgSrc}
-        alt=""
+        alt={imgAlt}
         width={400}
         height={400}
+        loading="lazy"
         className="mt-6 max-w-full h-auto rounded"
       />
     </article>
