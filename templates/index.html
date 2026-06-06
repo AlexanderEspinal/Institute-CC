@@ -1,16 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Instituto-C</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Blog Instituto</title>
 </head>
-<body class="bg-purple-50">
+<body>
     <header>
-        <h1 class="text-red-700">Principal</h1>
-        <p></p>
+        <h1 id="titulo">Blog de Cincinnatus</h1>
     </header>
-    <main></main>
+    <section>
+        <article>
+            <h2>Titulo del post 1</h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur assumenda reiciendis sed. Quam id quaerat repellendus ipsa! Nam repudiandae aliquam impedit sunt, adipisci vitae totam eaque, saepe suscipit ea cupiditate.</p>
+            <img src="{{ url_for('static', filename='img/images.jpg') }}" alt="" width="400px" height="400px">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nulla distinctio perferendis illum suscipit amet. Officiis, maiores. Omnis illum, mollitia totam, sunt distinctio optio animi officia sint, ducimus laboriosam vel voluptate.</p>
+        </article>
+
+        <article>
+            <h2>Titulo del post 2</h2>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur assumenda reiciendis sed. Quam id quaerat repellendus ipsa! Nam repudiandae aliquam impedit sunt, adipisci vitae totam eaque, saepe suscipit ea cupiditate.</p>
+            <img src="{{ url_for('static', filename='img/images2.jpg') }}" alt="" width="400px" height="400px">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nulla distinctio perferendis illum suscipit amet. Officiis, maiores. Omnis illum, mollitia totam, sunt distinctio optio animi officia sint, ducimus laboriosam vel voluptate.</p>
+        </article>
+    </section>
+    <footer>
+        <br>
+        <br>
+        <a href="#titulo">Ir al inicio</a>
+        <br>
+        <a href="mailto:aespinal@cincinnatus.edu.do">Gmail</a>
+        <p>Copyright 2023</p>
+    </footer>
 </body>
 </html>
