@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+backend/.venv/
+
+# Node
+node_modules/
+client/dist/
+
+# Env
+.env
+.env.local
+
+# Editor
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Agents (autoskills)
+.agents/
+client/.agents/
