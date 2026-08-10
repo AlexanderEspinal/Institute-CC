@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const morgan_1 = __importDefault(require("morgan"));
 const api = express_1.default.Router();
 const users = [
     {
@@ -20,17 +19,17 @@ const users = [
         password: "password"
     }
 ];
-api.use((0, morgan_1.default)("dev"));
-api.use(express_1.default.json());
 api.get("/users", (req, res) => {
     res.json(users);
 });
 api.post("/users", (req, res) => {
-    res.json({ message: "Hello World" });
-    console.log(req.body);
+    const addUser = { ...req.body, id: users.length + 1 };
+    users.push(addUser);
+    res.send(addUser);
 });
 api.get("/users/:id", (req, res) => {
-    res.json({ message: "Hello World" });
+    const searchUser = users.find((user) => user.id === Number(req.params.id));
+    res.json(searchUser);
 });
 api.put("/users/:id", (req, res) => {
     res.json({ message: "Hello World" });

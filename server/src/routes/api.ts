@@ -1,9 +1,8 @@
 import express, {type Request, type Response} from "express";
-import morgan from "morgan";
 
 const api: express.Router = express.Router();
 
-const users = [
+let users = [
     {
         id: 1,
         name: "John Doe",
@@ -18,33 +17,32 @@ const users = [
     }
 ]
 
-api.use(morgan("dev"));
-api.use(express.json());
-
-api.get("/users", (req: Request, res: Response) => {
-
+api.get("/users", (req: Request, res: Response) => {    
 res.json(users);
 
 });
 
 api.post("/users", (req: Request, res: Response) => {
-    res.json({message: "Hello World"});    
-    console.log(req.body);
+    const addUser = {...req.body, id: users.length + 1}
+    users.push(addUser)
+    res.send(addUser)
+   
 });
 
 api.get("/users/:id", (req: Request, res: Response) => {
 
-    res.json({message: "Hello World"});    
+    const searchUser = users.find((user) => user.id === Number(req.params.id))
+    res.json(searchUser)    
 });
 
 api.put("/users/:id", (req: Request, res: Response) => {
-
     res.json({message: "Hello World"});    
 });
 
 api.delete("/users/:id", (req: Request, res: Response) => {
+users = users.filter((user) => user.id !== Number(req.params.id))
+res.send("El usuario se ha eliminado")
 
-    res.json({message: "Hello World"});    
 });
 
 export default api;
