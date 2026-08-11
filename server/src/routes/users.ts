@@ -1,6 +1,6 @@
-import express, {type Request, type Response} from "express";
+import { Router, type Request, type Response } from "express";
 
-const api: express.Router = express.Router();
+const router: Router = Router();
 
 let users = [
     {
@@ -17,25 +17,22 @@ let users = [
     }
 ]
 
-api.get("/users", (req: Request, res: Response) => {    
-res.json(users);
-
+router.get("/users", (req: Request, res: Response) => {
+    res.json(users);
 });
 
-api.post("/users", (req: Request, res: Response) => {
-    const addUser = {...req.body, id: users.length + 1}
+router.post("/users", (req: Request, res: Response) => {
+    const addUser = { ...req.body, id: users.length + 1 }
     users.push(addUser)
     res.send(addUser)
-   
 });
 
-api.get("/users/:id", (req: Request, res: Response) => {
-
+router.get("/users/:id", (req: Request, res: Response) => {
     const searchUser = users.find((user) => user.id === Number(req.params.id))
-    res.json(searchUser)    
+    res.json(searchUser)
 });
 
-api.put("/users/:id", (req: Request, res: Response) => {
+router.put("/users/:id", (req: Request, res: Response) => {
     const id = Number(req.params.id);
     const updatedFields = { ...req.body };
     const exists = users.some((user) => user.id === id);
@@ -52,10 +49,9 @@ api.put("/users/:id", (req: Request, res: Response) => {
     res.json(updatedUser);
 });
 
-api.delete("/users/:id", (req: Request, res: Response) => {
-users = users.filter((user) => user.id !== Number(req.params.id))
-res.send("El usuario se ha eliminado")
-
+router.delete("/users/:id", (req: Request, res: Response) => {
+    users = users.filter((user) => user.id !== Number(req.params.id))
+    res.send("El usuario se ha eliminado")
 });
 
-export default api;
+export default router;
