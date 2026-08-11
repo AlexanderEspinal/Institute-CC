@@ -36,7 +36,20 @@ api.get("/users/:id", (req: Request, res: Response) => {
 });
 
 api.put("/users/:id", (req: Request, res: Response) => {
-    res.json({message: "Hello World"});    
+    const id = Number(req.params.id);
+    const updatedFields = { ...req.body };
+    const exists = users.some((user) => user.id === id);
+
+    if (!exists) {
+        return res.status(404).json({ error: "Usuario no encontrado" });
+    }
+
+    users = users.map((user) =>
+        user.id === id ? { ...user, ...updatedFields } : user
+    );
+
+    const updatedUser = users.find((user) => user.id === id);
+    res.json(updatedUser);
 });
 
 api.delete("/users/:id", (req: Request, res: Response) => {
