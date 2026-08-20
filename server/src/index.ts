@@ -1,8 +1,12 @@
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
+import path from "path";
+import { fileURLToPath } from "url";
 import router from "./routes/users";
 import { config } from "./config/env";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 
@@ -11,8 +15,10 @@ app.use(morgan("dev"));
 app.use(express.json());
 app.use("/api", router);
 
-app.get("/", (_req, res) => {
-  res.json({ message: "Institute-CC API is running" });
+const clientDist = path.join(__dirname, "../../client/dist");
+app.use(express.static(clientDist));
+app.get("*", (_req, res) => {
+  res.sendFile(path.join(clientDist, "index.html"));
 });
 
 app.listen(config.port, () => {
