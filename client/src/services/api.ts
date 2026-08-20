@@ -1,6 +1,7 @@
 export interface User {
   id: number
   name: string
+  lastname: string | null
   email: string
   password: string
 }
@@ -19,7 +20,7 @@ export async function getUserById(id: number): Promise<User> {
   return res.json()
 }
 
-export async function createUser(data: Omit<User, 'id'>): Promise<User> {
+export async function createUser(data: Omit<User, 'id' | 'lastname'> & { lastname?: string }): Promise<User> {
   const res = await fetch(BASE_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
