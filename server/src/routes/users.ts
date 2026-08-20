@@ -1,57 +1,61 @@
 import { Router, type Request, type Response } from "express";
+import { prisma } from "../lib/prisma";
 
 const router: Router = Router();
 
-let users = [
-    {
-        id: 1,
-        name: "John Doe",
-        email: "john.doe@example.com",
-        password: "password"
-    },
-    {
-        id: 2,
-        name: "Jane Doe",
-        email: "jane.doe@example.com",
-        password: "password"
+router.get("/users", async (_req: Request, res: Response) => {
+    try {
+        const users = await prisma.user.findMany();
+        res.json(users);
+    } catch (error) {
+        res.status(500).json({ error: "Error al obtener usuarios" });
     }
-]
-
-router.get("/users", (req: Request, res: Response) => {
-    res.json(users);
 });
 
-router.post("/users", (req: Request, res: Response) => {
-    const addUser = { ...req.body, id: users.length + 1 }
-    users.push(addUser)
-    res.send(addUser)
-});
-
-router.get("/users/:id", (req: Request, res: Response) => {
-    const searchUser = users.find((user) => user.id === Number(req.params.id))
-    res.json(searchUser)
-});
-
-router.put("/users/:id", (req: Request, res: Response) => {
-    const id = Number(req.params.id);
-    const updatedFields = { ...req.body };
-    const exists = users.some((user) => user.id === id);
-
-    if (!exists) {
-        return res.status(404).json({ error: "Usuario no encontrado" });
+router.post("/users", async (req: Request, res: Response) => {
+    try {
+        const user = await prisma.user.create({ data: req.body });
+        res.status(201).json(user);
+    } catch (error) {
+        res.status(400).json({ error: "Error al crear usuario" });
     }
-
-    users = users.map((user) =>
-        user.id === id ? { ...user, ...updatedFields } : user
-    );
-
-    const updatedUser = users.find((user) => user.id === id);
-    res.json(updatedUser);
 });
 
-router.delete("/users/:id", (req: Request, res: Response) => {
-    users = users.filter((user) => user.id !== Number(req.params.id))
-    res.send("El usuario se ha eliminado")
+router.get("/users/:id", async (req: Request, res: Response) => {
+    try {
+        const user = await prisma.user.findUnique({
+            where: { id: Number(req.params.id) }
+        });
+        if (!user) {
+            return res.status(404).json({ error: "Usuario no encontrado" });
+        }
+        res.json(user);
+    } catch (error) {
+        res.status(500).json({ error: "Error al obtener usuario" });
+    }
+});
+
+router.put("/users/:id", async (req: Request, res: Response) => {
+    try {
+        const user = await prisma.user.update({
+            where: { id: Number(req.params.id) },
+            data: req.body
+        });
+        res.json(user);
+    } catch (error) {
+        res.status(404).json({ error: "Usuario no encontrado" });
+    }
+});
+
+router.delete("/users/:id", async (req: Request, res: Response) => {
+    try {
+        await prisma.user.delete({
+            where: { id: Number(req.params.id) }
+        });
+        res.status(204).send();
+    } catch (error) {
+        res.status(404).json({ error: "Usuario no encontrado" });
+    }
 });
 
 export default router;
