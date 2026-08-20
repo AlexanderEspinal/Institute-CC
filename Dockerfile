@@ -32,10 +32,19 @@ COPY server/package.json server/pnpm-lock.yaml server/
 RUN pnpm install --frozen-lockfile --prod
 
 COPY --from=server-build /app/server/dist server/dist/
+COPY --from=server-build /app/server/prisma server/prisma/
+COPY --from=server-build /app/server/prisma.config.ts server/prisma.config.ts
+COPY --from=server-build /app/server/node_modules/.bin/prisma server/node_modules/.bin/prisma
+COPY --from=server-build /app/server/node_modules/prisma server/node_modules/prisma
+COPY --from=server-build /app/server/node_modules/@prisma server/node_modules/@prisma
 COPY --from=client-build /app/client/dist client/dist/
 
 ENV NODE_ENV=production
 ENV PORT=5000
 EXPOSE 5000
 
+COPY docker-entrypoint.sh /app/docker-entrypoint.sh
+RUN chmod +x /app/docker-entrypoint.sh
+
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
 CMD ["node", "server/dist/index.js"]

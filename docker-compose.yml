@@ -1,0 +1,26 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-institute}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-institute}
+      POSTGRES_DB: ${POSTGRES_DB:-institute_cc}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT:-5000}:5000"
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-institute}:${POSTGRES_PASSWORD:-institute}@db:5432/${POSTGRES_DB:-institute_cc}?schema=public
+      PORT: 5000
+    depends_on:
+      - db
+
+volumes:
+  pgdata:
