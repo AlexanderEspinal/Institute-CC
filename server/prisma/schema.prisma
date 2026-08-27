@@ -19,5 +19,13 @@ name String
 lastname String?
 email String @unique
 password String 
+posts Post[]
+}
 
+model Post {
+id Int @unique @default(autoincrement())
+title String
+content String
+authorId Int
+author User @relation(fields: [authorId], references: [id])
 }
